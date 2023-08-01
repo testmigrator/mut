@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.test.migration.dao.ApiMappingDao">
+    <resultMap id="apiMappingMap" type="com.test.migration.entity.po.ApiMapping">
+    </resultMap>
+
+    <sql id="select">
+        select
+            id,
+            task_id,
+            source_api_id,
+            target_api_id
+        from api_mapping
+    </sql>
+
+    <update id="dropTable">
+        drop table if exists api_mapping;
+    </update>
+
+    <update id="createTable">
+        CREATE TABLE `api_mapping` (
+             `id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+             `task_id` INTEGER DEFAULT NULL,
+             `source_api_id` INTEGER DEFAULT NULL,
+             `target_api_id` INTEGER DEFAULT NULL
+        )
+    </update>
+
+    <insert id="batchInsert"
+            parameterType="com.test.migration.entity.po.ApiMapping">
+        <![CDATA[
+        insert into api_mapping (
+            task_id,
+            source_api_id,
+            target_api_id
+        )
+        ]]>
+        values
+        <foreach collection="list" item="item" separator="," >
+        (
+            #{item.taskId},
+            #{item.sourceApiId},
+            #{item.targetApiId}
+        )
+        </foreach>
+    </insert>
+
+    <select id="selectByTaskId" resultMap="apiMappingMap">
+        <include refid="select"/>
+        where task_id = #{taskId}
+    </select>
+
+
+    <delete id="delete">
+        delete from api_mapping
+    </delete>
+
+</mapper>

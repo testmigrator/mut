@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC
+        "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <properties resource="db.properties" />
+
+    <settings>
+        <setting name="logImpl" value="org.apache.ibatis.logging.nologging.NoLoggingImpl"/>
+
+        <!-- 全局的映射器启用或禁用缓存。 -->
+        <setting name="cacheEnabled" value="true"/>
+        <!-- 全局启用或禁用延迟加载 -->
+        <setting name="lazyLoadingEnabled" value="true"/>
+        <!-- 允许或不允许多种结果集从一个单独的语句中返回 -->
+        <setting name="multipleResultSetsEnabled" value="true"/>
+        <!-- 使用列标签代替列名 -->
+        <setting name="useColumnLabel" value="true"/>
+        <!-- 设置超时时间 -->
+        <setting name="defaultStatementTimeout" value="60"/>
+        <!-- 设置驼峰标识 -->
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+        <setting name="lazyLoadTriggerMethods" value=""/>
+        <!-- 允许JDBC支持生成的键 -->
+        <setting name="useGeneratedKeys" value="true"/>
+        <!-- 配置默认的执行器 -->
+        <setting name="defaultExecutorType" value="REUSE"/>
+    </settings>
+
+    <!-- 指定整个包下的类都是别名 -->
+<!--    <typeAliases>-->
+<!--        <package name="com.pojo"/>-->
+<!--    </typeAliases>-->
+
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="${driver}"/>
+                <property name="url" value="${url}"/>
+            </dataSource>
+        </environment>
+    </environments>
+    <!-- 映射文件 通配符是spring-mybatis提供的功能，mybatis自身不支持通配符。阿西吧 -->
+    <mappers>
+        <mapper resource="mybatis/mapper/apiBasicDao.xml"/>
+        <mapper resource="mybatis/mapper/apiMappingDao.xml"/>
+        <mapper resource="mybatis/mapper/migrateTestDao.xml"/>
+        <mapper resource="mybatis/mapper/testMethodDiffDao.xml"/>
+    </mappers>
+</configuration>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.test.migration.dao.MigrateTestDao">
+    <resultMap id="migrateTestMap" type="com.test.migration.entity.po.MigrateTest">
+    </resultMap>
+
+    <sql id="select">
+        select
+            id,
+            task_id,
+            test_filepath,
+            test_method_api_invocation,
+            reference_type
+        from migrate_test
+    </sql>
+
+    <update id="dropTable">
+        drop table if exists migrate_test;
+    </update>
+
+    <update id="createTable">
+        CREATE TABLE `migrate_test` (
+             `id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+             `task_id` INTEGER DEFAULT NULL,
+             `test_filepath` TEXT DEFAULT NULL,
+             `test_method_api_invocation` TEXT DEFAULT NULL,
+             `reference_type` TEXT DEFAULT NULL
+        )
+    </update>
+
+    <insert id="batchInsert"
+            parameterType="com.test.migration.entity.po.MigrateTest">
+        <![CDATA[
+        insert into migrate_test (
+            task_id,
+            test_filepath,
+            test_method_api_invocation,
+            reference_type
+        )
+        ]]>
+        values
+        <foreach collection="list" item="item" separator="," >
+            (
+            #{item.taskId},
+            #{item.testFilepath},
+            #{item.testMethodApiInvocation},
+            #{item.referenceType}
+            )
+        </foreach>
+    </insert>
+
+    <select id="selectByTaskId" resultMap="migrateTestMap">
+        <include refid="select"/>
+        where task_id = #{taskId}
+    </select>
+
+</mapper>

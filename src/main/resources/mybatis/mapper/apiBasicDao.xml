@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.test.migration.dao.ApiBasicDao">
+    <resultMap id="apiBasicMap" type="com.test.migration.entity.po.ApiBasic">
+    </resultMap>
+
+    <sql id="select">
+        select
+            id,
+            task_id,
+            filepath,
+            class_name,
+            api_name,
+            type,
+            method_word_sequence,
+            token_sequence,
+            token_vector,
+            class_name_token_sequence,
+            class_comment_token_sequence,
+            method_comment_token_sequence,
+            method_param_return_token_sequence
+        from api_basic
+    </sql>
+
+    <update id="dropTable">
+        drop table if exists api_basic;
+    </update>
+
+    <update id="createTable">
+        CREATE TABLE `api_basic` (
+             `id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+             `task_id` INTEGER DEFAULT NULL,
+             `filepath` TEXT DEFAULT NULL,
+             `class_name` TEXT DEFAULT NULL,
+             `api_name` TEXT DEFAULT NULL,
+             `type` INTEGER DEFAULT NULL,
+             `method_word_sequence` TEXT DEFAULT NULL,
+             `token_sequence` TEXT DEFAULT NULL,
+             `token_vector` TEXT DEFAULT NULL,
+             `class_name_token_sequence` TEXT DEFAULT NULL,
+             `class_comment_token_sequence` TEXT DEFAULT NULL,
+             `method_comment_token_sequence` TEXT DEFAULT NULL,
+             `method_param_return_token_sequence` TEXT DEFAULT NULL
+        )
+    </update>
+
+    <insert id="insert"
+            parameterType="com.test.migration.entity.po.ApiBasic">
+        <![CDATA[
+            insert into api_basic (
+                task_id,
+                filepath,
+                class_name,
+                api_name,
+                type,
+                method_word_sequence,
+                token_sequence,
+                token_vector,
+                class_name_token_sequence,
+                class_comment_token_sequence,
+                method_comment_token_sequence,
+                method_param_return_token_sequence
+            ) values (
+                #{taskId},
+                #{filepath},
+                #{className},
+                #{apiName},
+                #{type},
+                #{methodWordSequence},
+                #{tokenSequence},
+                #{tokenVector},
+                #{classNameTokenSequence},
+                #{classCommentTokenSequence},
+                #{methodCommentTokenSequence},
+                #{methodParamReturnTokenSequence}
+            )
+        ]]>
+    </insert>
+
+    <insert id="batchInsert"
+            parameterType="com.test.migration.entity.po.ApiBasic">
+        <![CDATA[
+        insert into api_basic (
+            task_id,
+            filepath,
+            class_name,
+            api_name,
+            type,
+            method_word_sequence,
+            token_sequence,
+            token_vector,
+            class_name_token_sequence,
+            class_comment_token_sequence,
+            method_comment_token_sequence,
+            method_param_return_token_sequence
+        )
+        ]]>
+        values
+        <foreach collection="list" item="item" separator="," >
+        (
+            #{item.taskId},
+            #{item.filepath},
+            #{item.className},
+            #{item.apiName},
+            #{item.type},
+            #{item.methodWordSequence},
+            #{item.tokenSequence},
+            #{item.tokenVector},
+            #{item.classNameTokenSequence},
+            #{item.classCommentTokenSequence},
+            #{item.methodCommentTokenSequence},
+            #{item.methodParamReturnTokenSequence}
+        )
+        </foreach>
+    </insert>
+
+    <update id="update"
+            parameterType="com.test.migration.entity.po.ApiBasic">
+        <![CDATA[
+            update api_basic
+        ]]>
+        <set>
+            <if test="tokenVector != null">
+                token_vector = #{tokenVector},
+            </if>
+        </set>
+        <![CDATA[
+            where id = #{id}
+        ]]>
+    </update>
+
+    <select id="getById" resultType="com.test.migration.entity.po.ApiBasic">
+        <include refid="select"/>
+        where id = #{id}
+    </select>
+
+    <select id="selectAll" resultMap="apiBasicMap">
+        <include refid="select"/>
+    </select>
+
+    <select id="selectByTaskId" resultMap="apiBasicMap">
+        <include refid="select"/>
+        where task_id = #{taskId}
+    </select>
+
+    <select id="selectByIds" parameterType="java.util.List" resultMap="apiBasicMap">
+        <include refid="select"/>
+        where id in
+        <foreach collection="list" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </select>
+
+    <delete id="deleteById">
+        delete from api_basic
+        where id = #{id}
+    </delete>
+</mapper>

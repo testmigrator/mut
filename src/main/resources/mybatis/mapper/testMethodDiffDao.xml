@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.test.migration.dao.TestMethodDiffDao">
+    <resultMap id="testMethodDiffMap" type="com.test.migration.entity.po.TestMethodDiff">
+    </resultMap>
+
+    <sql id="select">
+        select
+            id,
+            business_key,
+            filepath,
+            method_name,
+            old_code,
+            new_code,
+            test_method_desc,
+            test_component_desc,
+            class_mapping_tips,
+            miss_mapping_tips,
+            status,
+            type,
+            decouple_old_code,
+            decouple_new_code
+        from test_method_diff
+    </sql>
+
+    <update id="dropTable">
+        drop table if exists test_method_diff;
+    </update>
+
+    <update id="createTable">
+        CREATE TABLE `test_method_diff` (
+             `id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+             `business_key` TEXT DEFAULT NULL,
+             `filepath` TEXT DEFAULT NULL,
+             `method_name` TEXT DEFAULT NULL,
+             `old_code` TEXT DEFAULT NULL,
+             `new_code` TEXT DEFAULT NULL,
+             `test_method_desc` TEXT DEFAULT NULL,
+             `test_component_desc` TEXT DEFAULT NULL,
+             `class_mapping_tips` TEXT DEFAULT NULL,
+             `miss_mapping_tips` TEXT DEFAULT NULL,
+             `status` VARCHAR DEFAULT NULL,
+             `type` VARCHAR DEFAULT NULL,
+             `decouple_old_code` TEXT DEFAULT NULL,
+             `decouple_new_code` TEXT DEFAULT NULL
+        )
+    </update>
+
+    <insert id="insert"
+            parameterType="com.test.migration.entity.po.TestMethodDiff">
+        <![CDATA[
+            insert into test_method_diff (
+                business_key,
+                filepath,
+                method_name,
+                old_code,
+                new_code,
+                test_method_desc,
+                test_component_desc,
+                class_mapping_tips,
+                miss_mapping_tips,
+                status,
+                type,
+                decouple_old_code,
+                decouple_new_code
+            ) values (
+                #{businessKey},
+                #{filepath},
+                #{methodName},
+                #{oldCode},
+                #{newCode},
+                #{testMethodDesc},
+                #{testComponentDesc},
+                #{classMappingTips},
+                #{missMappingTips},
+                #{status},
+                #{type},
+                #{decoupleOldCode},
+                #{decoupleNewCode}
+            )
+        ]]>
+    </insert>
+
+
+    <update id="update"
+            parameterType="com.test.migration.entity.po.TestMethodDiff">
+        <![CDATA[
+            update test_method_diff
+        ]]>
+        <set>
+            <if test="oldCode != null">
+                old_code = #{oldCode},
+            </if>
+            <if test="newCode != null">
+                new_code = #{newCode},
+            </if>
+            <if test="testMethodDesc != null">
+                test_method_desc = #{testMethodDesc},
+            </if>
+            <if test="testComponentDesc != null">
+                test_component_desc = #{testComponentDesc},
+            </if>
+            <if test="classMappingTips != null">
+                class_mapping_tips = #{classMappingTips},
+            </if>
+            <if test="missMappingTips != null">
+                miss_mapping_tips = #{missMappingTips},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="decoupleOldCode != null">
+                decouple_old_code = #{decoupleOldCode},
+            </if>
+            <if test="decoupleNewCode != null">
+                decouple_new_code = #{decoupleNewCode},
+            </if>
+        </set>
+        <![CDATA[
+            where business_key = #{businessKey}
+        ]]>
+    </update>
+
+    <select id="getById" resultType="com.test.migration.entity.po.TestMethodDiff">
+        <include refid="select"/>
+        where id = #{id}
+    </select>
+
+    <select id="getByBusinessKey" resultType="com.test.migration.entity.po.TestMethodDiff">
+        <include refid="select"/>
+        where business_key = #{businessKey}
+    </select>
+
+    <select id="selectAll" resultMap="testMethodDiffMap">
+        <include refid="select"/>
+    </select>
+
+    <select id="selectByIds" parameterType="java.util.List" resultMap="testMethodDiffMap">
+        <include refid="select"/>
+        where id in
+        <foreach collection="list" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </select>
+</mapper>

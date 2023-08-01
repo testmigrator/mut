@@ -1,0 +1,13 @@
+{"createWindowMagnification_showControl":[630],"deleteWindowMagnification_destroyControl":[630,633],"tearDown":[633]}
+{"startTrackingPerDisplay":[1673,1678],"onWindowsChanged_focusChangeOnNonTopFocusedDisplay_perDisplayFocusOn_notChangeWindow":[1673],"notifyOutsideTouch":[1673,1694],"getPictureInPictureWindow_shouldNotNull":[1673],"onTouchInteractionEnd_noServiceInteractiveWindow_shouldClearA11yFocus":[1679],"onWindowsForAccessibilityChanged":[1673],"onWindowsChangedNoForceSend_focusChanged_shouldUpdateWindows":[1673],"onWindowsChangedAndForceSend_shouldUpdateWindows":[1673],"stopTrackingWindows_shouldDisableWindowManagerCallback":[1679],"stopTrackingWindows_shouldClearWindows":[1679],"updateActiveAndA11yFocusedWindow_windowStateChangedEvent_noTracking_shouldUpdate":[1679],"onWindowsChangedNoForceSend_windowChanged_shouldUpdateWindows":[1673],"onWindowChange_focusChangeToNonTopFocusedDisplay_perDisplayFocusOff_shouldChangeWindow":[1673],"onWindowsChanged_duringTouchInteractAndFocusChange_shouldChangeActiveWindow":[1673],"computePartialInteractiveRegionForWindow_halfVisible_returnHalfRegion":[1673],"computePartialInteractiveRegionForWindow_partialVisible_returnVisibleRegion":[1673],"stopTrackingWindows_onNonTopFocusedDisplay_shouldNotResetTopFocusWindow":[1679],"onWindowsChangedNoForceSend_layerChanged_shouldNotUpdateWindows":[1673],"computePartialInteractiveRegionForWindow_wholeVisible_returnWholeRegion":[1673]}
+{"testOnDisplayChanged":[1266]}
+{"testOnThemeChanged_doesntCrash":[593]}
+{"getCount_ignoresResultsOlderThanTwentyFourHours":[491],"record_compactsFileToLast24Hours":[491],"record_doesNotFailForBadFile":[491],"getCount_removesFutureEventsIfClockHasChanged":[491],"record_persistsStateToDisk":[491],"getCount_includesResultsInLastTwentyFourHours":[491]}
+{"testDragDownHelperCalledWhenDraggingDown":[534]}
+{"test_changedGestureExclusionLimit_invokesCallback":[651],"test_constantsAreLoaded_afterChange":[651],"test_constantsAreLoaded_initially":[651],"test_minimumExclusionLimitIs_200dp":[651],"test_changedPreQStickyImmersive_invokesCallback":[651]}
+{"testAddWindow":[1097]}
+{"testReportOrientationChange":[1103],"testLandscapeSeascapeRotationByPolicy":[1097],"testLandscapeSeascapeRotationByApp":[1097],"testKeyguardFlagsDuringRelaunch":[1097],"testHasStartingWindow":[1097]}
+{"disableWindowMagnification":[1662]}
+{"testAdditionsAndRemovals":[1390]}
+{"makeSettingsIntent":[169],"makeContactsIntent":[169]}
+{"startActivityOnDisplay":[169]}
