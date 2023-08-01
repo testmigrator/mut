@@ -1,9 +1,9 @@
-# mut
+# MUT
 
 a test migration tool
 
 
-## antlr:s
+## antlr:
 
 Parses Java files to generate abstract syntax trees and retrieve class information, among other tasks.
 
