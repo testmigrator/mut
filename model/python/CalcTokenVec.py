@@ -9,7 +9,6 @@ import sys
 def loadApiDataFromSQLLite(taskId: str, dbFilepath: str):
     conn = sqlite3.connect(dbFilepath)
     cursor = conn.cursor()
-    # api_basic表结构:
     # id, task_id, filepath, class_name, api_name,
     # type, method_word_sequence, token_sequence, token_vector, class_name_token_sequence
     apiQuerySql = "select * from api_basic where task_id = " + taskId
@@ -17,15 +16,10 @@ def loadApiDataFromSQLLite(taskId: str, dbFilepath: str):
     return cursor.fetchall()
 
 
-"""
-加载model
-对于每个api，将api和class的token序列从临时数据表中取出，然后转换为向量形式，计算加和平均
-"""
 
 
 def generateVectorDict(apis, modelFilepath: str, vectorDictFilepath: str, type: str):
     np.set_printoptions(linewidth=np.inf)
-    # 加载模型
     model = Word2Vec.load(modelFilepath)
     word_vectors = model.wv
     wordVecDict = dict()
@@ -50,11 +44,9 @@ def generateVectorDict(apis, modelFilepath: str, vectorDictFilepath: str, type: 
         if type == 'methodParamReturn':
             tokenKeys = api[12].split(',')
 
-        # 可能遇到stop-word，跳过
         if len(tokenKeys) == 0 or tokenKeys[0] not in wordVecDict.keys():
             apiVectorDict[api[0]] = '0'
         else:
-            # 向量的加和平均
             tmp = wordVecDict[tokenKeys[0]]
             for index in range(1, len(tokenKeys)):
                 tmp = tmp + wordVecDict[tokenKeys[index]]

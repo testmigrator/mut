@@ -3,19 +3,15 @@ import CppHeaderParser
 # cppHeader = CppHeaderParser.CppHeader("../doc/harmony/demo/SimpleClass.h")
 
 
-# 获取include的头文件名
 # print(cppHeader.includes)
 
-# 获取头文件中定义的类名
 # for classname in cppHeader.classes.keys():
 #     print(classname)
 
-# 获取类所属的namespace
 # print(cppHeader.classes['SampleClass']['namespace'])
 # print(cppHeader.classes['AlphaClass']['namespace'])
 # print(cppHeader.classes['OmegaClass']['namespace'])
 
-# 获取类里的public方法
 # for oneMethod in cppHeader.classes['AlphaClass']['methods']['public']:
 #     print(oneMethod['name'])
 # for kv in oneMethod.items():
@@ -33,7 +29,6 @@ import os
 delimiter = '$$$'
 
 def fetchCppHFileApiBasic(filepath: str):
-    # apiResultLine数据结构：
     # classComment $$$ className $$$ methodComment $$$ methodName $$$ methodParameter $$$ methodReturn
     apiResultLines = list()
     failParseFiles = list()
@@ -113,7 +108,6 @@ def fetchCppHFileApiBasic(filepath: str):
         os.remove(newfilePath)
 
     print(list(set(apiResultLines)))
-    # print("解析失败文件：", failParseFiles)
 
     return apiResultLines
 
