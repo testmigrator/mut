@@ -46,7 +46,6 @@ public class TestMethodDiffService {
         try {
             String newCoupleCode = translateOldCoupleCode(byBusinessKey);
 
-            // 代码格式化
             String formatNewCode = formatCode(newCoupleCode);
 
             TestMethodDiff testMethodDiff = TestMethodDiff.builder()
@@ -56,7 +55,6 @@ public class TestMethodDiffService {
 
         } catch (Exception e) {
             e.printStackTrace();
-            Log.error("translateCoupleCode报错啦！businessKey:" + businessKey);
         }
     }
 

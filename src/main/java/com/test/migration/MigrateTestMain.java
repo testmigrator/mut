@@ -5,7 +5,6 @@ import utils.MappingRuleWriter;
 import utils.MyBatisUtil;
 
 public class MigrateTestMain {
-    // 生成api关联test信息
     MigrateTestService migrateTestService = new MigrateTestService();
 
     public static void main(String[] args) {
@@ -14,7 +13,6 @@ public class MigrateTestMain {
     }
 
     public void process() {
-        // 筛选出待迁移的test
         migrateTestService.generateMigrateTest();
     }
 

@@ -58,14 +58,12 @@ public interface Constants {
     String TESTS = "tests";
 
     /**
-     * 出现类匹配（sourceClass和targetClass）一对多匹配关系时，多个target之间用分隔符连接
      */
     String ClassMappingOneToManySplitter = "-OTM-";
 
 
     interface Hint {
         /**
-         * 存在一对多类匹配关系，如果出现在方法内部，会根据api调用关系进行target筛选，如果是在外部，那么会把所有的target以注释形式列举出来
          */
         String multipleClassMappingMessage = "// There are multiple target class mapping references: \n";
 

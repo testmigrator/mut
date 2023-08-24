@@ -38,7 +38,6 @@ public class APIExtractorVisitor extends Java8BaseVisitor<RuleNode> {
     }
 
     /**
-     * 方法声明
      */
     @Override
     public RuleNode visitMethodDeclaration(Java8Parser.MethodDeclarationContext ctx) {
@@ -54,9 +53,6 @@ public class APIExtractorVisitor extends Java8BaseVisitor<RuleNode> {
         return visitChildren(ctx);
     }
 
-    /**
-     * 方法声明
-     */
     @Override
     public RuleNode visitInterfaceMethodDeclaration(Java8Parser.InterfaceMethodDeclarationContext ctx) {
         CtxLine ctxLine = CtxLine.builder()
@@ -72,9 +68,6 @@ public class APIExtractorVisitor extends Java8BaseVisitor<RuleNode> {
     }
 
 
-    /**
-     * 类构造函数也视为API
-     */
     @Override
     public RuleNode visitConstructorDeclarator(Java8Parser.ConstructorDeclaratorContext ctx) {
         CtxLine ctxLine = CtxLine.builder()
@@ -157,7 +150,6 @@ public class APIExtractorVisitor extends Java8BaseVisitor<RuleNode> {
                 comments.add(comment);
             }
         }
-        // 过滤掉内部注释
         List<CtxLine> ctxLineList = getCtxLineList();
         comments = comments.stream()
                 .filter(comment -> keep(ctxLineList, comment))
@@ -181,7 +173,6 @@ public class APIExtractorVisitor extends Java8BaseVisitor<RuleNode> {
                 .filter(x -> x.getType() == 2)
                 .collect(Collectors.toMap(CtxLine::getStartLine, Function.identity()));
 
-        // 遍历类中的每个方法
         for (MethodModel methodModel : methodModelList) {
             CtxLine ctxLine = methodMap.get(methodModel.getStartLine());
             if (ctxLine == null) {
@@ -189,35 +180,26 @@ public class APIExtractorVisitor extends Java8BaseVisitor<RuleNode> {
             }
             String methodComment = "";
             String classComment = "";
-            // 遍历 comments list
             for (int i = 0; i < comments.size(); i++) {
                 CtxLine line = comments.get(i);
-                // 找到要fill comment的方法
                 if (line.getType() != 2 || ctxLine.getStartLine() != line.getStartLine()) {
                     continue;
                 }
 
-                //method出现在第一个位置，说明不存在comment
                 if (i == 0) {
                     continue;
                 }
 
-                //如果method的前一个位置是注释，那么就是该方法的注释信息
                 CtxLine preCtxLine = comments.get(i - 1);
                 if (preCtxLine.getType() == 3) {
                     methodComment = preCtxLine.getText();
                 }
 
-                //往前找类注释信息
                 for (int j = i - 1; j > 0; j--) {
                     CtxLine parentCtxLine = comments.get(j);
-                    //如果是class或interface类型
                     if (parentCtxLine.getType() == 0) {
-                        // 这个class/interface类型必须包含该方法
                         if (parentCtxLine.getStartLine() <= line.getStartLine() && parentCtxLine.getEndLine() >= line.getEndLine()) {
-                            //如果出现在第一个位置，说明没有class/interface注释
                             CtxLine preParentCtxLine = comments.get(j - 1);
-                            //class的前一个位置是注释，那么就是该class的注释信息
                             if (preParentCtxLine.getType() == 3) {
                                 classComment = preParentCtxLine.getText();
                             }
@@ -232,7 +214,6 @@ public class APIExtractorVisitor extends Java8BaseVisitor<RuleNode> {
     }
 
     private boolean keep(List<CtxLine> ctxLineList, CtxLine comment) {
-        // 排除掉最外层类
         CtxLine firstClass = ctxLineList.stream()
                 .filter(x -> x.getType() == 0)
                 .min(Comparator.comparing(CtxLine::getStartLine))
@@ -258,10 +239,6 @@ public class APIExtractorVisitor extends Java8BaseVisitor<RuleNode> {
 
 
 
-
-    /**
-     * 用于文档信息寻找mapping关系
-     */
     @Data
     @Builder
     @NoArgsConstructor
@@ -283,9 +260,7 @@ public class APIExtractorVisitor extends Java8BaseVisitor<RuleNode> {
         String methodReturn;
     }
 
-    /**
-     * 用于comment和method匹配
-     */
+
     @Data
     @Builder
     public static class CtxLine {

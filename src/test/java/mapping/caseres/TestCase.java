@@ -25,7 +25,6 @@ public class TestCase {
         List<ApiMapping> apiMappings = apiMappingService.selectByTaskId(1);
 
         Map<Integer, ApiBasic> queryApiMap = apiBasics.stream().collect(Collectors.toMap(ApiBasic::getId,Function.identity()));
-        // source类名，API名，target类名，api名
         for (ApiMapping apiMapping: apiMappings) {
             ApiBasic source = queryApiMap.get(apiMapping.getSourceApiId());
             ApiBasic target = queryApiMap.get(apiMapping.getTargetApiId());

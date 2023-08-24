@@ -24,7 +24,6 @@ public class MainTest {
         InputStream resourceAsStream = ClassLoader.getSystemResourceAsStream("test.yml");
         Map obj = yaml.load(resourceAsStream);
         Map<String,Object> param = new HashMap<>();
-        //需要注意，此类加载器只能得到它的最顶层的key的值
         Map<String,Object> params= (Map) obj.get("animation");
         param.putAll(params);
 

@@ -7,7 +7,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 
 /**
- * 映射规则的自动写入
  * mappingRule
  */
 public class MappingRuleWriter {
@@ -25,11 +24,8 @@ public class MappingRuleWriter {
 
     public static void clear(String filepath){
         try {
-            // 使用FileWriter不需要考虑原文件不存在的情况
-            // 当该文件不存在时，new FileWriter(file)会自动创建一个真实存在的空文件
             FileWriter fileWriter = new FileWriter(filepath);
-            // 往文件重写内容
-            fileWriter.write("");// 清空
+            fileWriter.write("");
             fileWriter.flush();
             fileWriter.close();
         } catch (IOException e) {
@@ -57,10 +53,7 @@ public class MappingRuleWriter {
         Properties properties = new Properties();
 
         try {
-            // 使用“输出流”，将Properties集合中的KV键值对，写入*.properties文件
-            // 注意这个路径是编译后的文件路径 在target目录下
             String filepath = ClassLoader.getSystemResource(propertyName).getPath();
-            // 避免重复写入
             Properties currentProperties = readProperties(propertyName);
             String currentValue = currentProperties.getProperty(key);
             if (StringUtils.equals(value, currentValue)) {

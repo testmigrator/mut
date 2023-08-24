@@ -18,20 +18,6 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-/**
- * 现在测试迁移的思路是：
- * 一：对尽可能多数据集进行筛选：api映射关系比较好的
- * 1.source-java侧：选取github有名的数据集
- * 2.target-cpp侧：选取github数据集，不一定有名，但是要近期有更新
- * <p>
- * 二：不一定映射很充分，只要有个别模块甚至类映射还可以，就可以做test迁移
- * <p>
- * 三：总迁移test至少要达到500个
- * <p>
- * <p>
- * 处理策略：
- * 由于人工挨个跑实验效率太低，写一个工具来批量计算
- */
 public class DatasetSelectMain {
 
     static final String OUTPUT_FILE_PATH = "/Users/gaoyi/IdeaProjects/TestMigrationV2/experiment/batch/";
@@ -141,7 +127,6 @@ public class DatasetSelectMain {
                 .collect(Collectors.toList());
 
 
-        //构建每个api，对应哪些test
         // api mapping
         // testfilepath test repeat
 
@@ -174,8 +159,6 @@ public class DatasetSelectMain {
             ApiBasic targetApi = apiBasicMap.get(existInvokeMapping.getTargetApiId());
             testLines.add(existInvokeMapping.getId() + "," + sourceApi.getApiName() + "   " + sourceApi.getClassName() + "    |    " + targetApi.getApiName() + "   " + targetApi.getClassName());
 
-            // translateTests：筛选出的所有待迁移test
-            // 这一步要对上述test进行过滤，test必须调用在mapping_apis_modify中的source-api
             for (MigrateTest x : migrateTests) {
                 String testFilepath = x.getTestFilepath();
                 // key：testName value：api_ids

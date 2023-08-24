@@ -27,20 +27,16 @@ public class TaskParameterReader {
         }
         List<String> sourceFiles = Splitter.on(",").splitToList(taskParameter.getSourceFilepath());
         List<String> testFiles = Splitter.on(",").splitToList(taskParameter.getTargetSourceCodeFilepath());
-        OutputReportCollector.add("源项目扫描源码文件路径：");
         sourceFiles.forEach(OutputReportCollector::add);
 
-        OutputReportCollector.add("目标项目扫描源码文件路径：");
         OutputReportCollector.add(taskParameter.getTargetFilepath());
         OutputReportCollector.add("");
 
-        OutputReportCollector.add("源项目扫描测试文件路径：");
         testFiles.forEach(OutputReportCollector::add);
         OutputReportCollector.add("");
     }
 
     /**
-     * 这个方法用于TestMigrationMain的方式启动：自动找key
      */
     public static TaskParameter buildTaskParameter(String hys, String ads, String tests, String moduleName) {
         String userDir = System.getProperty("user.dir");
@@ -61,10 +57,7 @@ public class TaskParameterReader {
         String classCommentVectorDictFilepath = word2vecPath + "classCommentVectorDict.txt";
         String methodCommentDictFilepath = word2vecPath + "methodCommentDict.txt";
         String methodParamReturnVectorDictFilepath = word2vecPath + "methodParamReturnVectorDict.txt";
-
-        // 文件输出路径
         String outputFilepath = userDir + File.separator + "output" + File.separator + moduleName + File.separator;
-        //临时数据库文件路径
         String dbFilepath = userDir + File.separator + "data.db";
 
         InputStream in = ClassLoader.getSystemResourceAsStream("task.properties");
@@ -75,7 +68,6 @@ public class TaskParameterReader {
             throw new RuntimeException(e);
         }
 
-        // 获取文件路径
         String sourceProjectFilepath = properties.getProperty("sourceProjectFilepath");
         String targetProjectFilepath = properties.getProperty("targetProjectFilepath");
         String sourceModuleFilepath = properties.getProperty("sourceModuleFilepath");
@@ -132,9 +124,7 @@ public class TaskParameterReader {
         String methodCommentDictFilepath = word2vecPath + "methodCommentDict.txt";
         String methodParamReturnVectorDictFilepath = word2vecPath + "methodParamReturnVectorDict.txt";
 
-        // 文件输出路径
         String outputFilepath = userDir + File.separator + "output" + File.separator;
-        //临时数据库文件路径
         String dbFilepath = userDir + File.separator + "data.db";
 
         InputStream in = ClassLoader.getSystemResourceAsStream("task.properties");
@@ -180,13 +170,11 @@ public class TaskParameterReader {
         String pythonPath = userDir + File.separator + "model" + File.separator + "python" + File.separator;
         String word2vecPath = userDir + File.separator + "model" + File.separator + "word2vec" + File.separator;
 
-        // python文件路径
         String pythonCppExtractor = pythonPath + "CppExtractor.py";
         String pythonWordVec = pythonPath + "WordVec.py";
         String pythonCalcTokenVec = pythonPath + "CalcTokenVec.py";
         String pythonCalcSimilarity = pythonPath + "CalcSimilarity.py";
 
-        //中间过程：生成词向量文件的路径
         String corpusFilepath = word2vecPath + "corpus.txt";
         String wordVecModelFilepath = word2vecPath + "word2vec.model";
         String apiVectorDictFilepath = word2vecPath + "apiVectorDict.txt";
@@ -195,9 +183,7 @@ public class TaskParameterReader {
         String methodCommentDictFilepath = word2vecPath + "methodCommentDict.txt";
         String methodParamReturnVectorDictFilepath = word2vecPath + "methodParamReturnVectorDict.txt";
 
-        // 文件输出路径
         String outputFilepath = userDir + File.separator + "output" + File.separator;
-        //临时数据库文件路径
         String dbFilepath = userDir + File.separator + "data.db";
 
         InputStream in = ClassLoader.getSystemResourceAsStream("task.properties");
@@ -208,7 +194,6 @@ public class TaskParameterReader {
             throw new RuntimeException(e);
         }
 
-        // 获取文件路径
         return TaskParameter.builder()
                 .taskId(Integer.parseInt(properties.getProperty("taskId")))
                 .sourceFilepath(properties.getProperty("sourceFilepath"))

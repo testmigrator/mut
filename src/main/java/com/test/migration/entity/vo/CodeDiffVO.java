@@ -19,11 +19,9 @@ public class CodeDiffVO {
     private String testMethodDesc;
     private String testComponentDesc;
 
-    // 测试解耦结果
     private String decoupleOldCode;
     private String decoupleNewCode;
 
-    // 冗余，一个test文件下的多个test方法可以共享
     private String filepath;
     private String filename;
     private SetupTearDown setupTearDown;

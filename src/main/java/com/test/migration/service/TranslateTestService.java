@@ -36,42 +36,30 @@ public class TranslateTestService {
     private final TestMethodDiffService testMethodDiffService = new TestMethodDiffService();
     private final MigrateTestService migrateTestService = new MigrateTestService();
 
-    /**
-     * 代码转换：
-     * 候选ut文件，按照ut中需要做迁移的test method，以文件为单位进行转换
-     */
+
     public void translateCode() {
         TaskParameter taskParameter = TaskParameterReader.getTaskParameter();
 
         List<MigrateTest> migrateTests = migrateTestService.selectByTaskId(taskParameter.getTaskId());
 
-        // 加载代码匹配关系
         MappingRuleLoader.load();
 
-        Log.info("总计[" + migrateTests.size() + "]个测试文件需要处理代码迁移");
-
-        // 以每个test文件为单位进行代码转换
         migrateTests.stream()
-                //todo test 排查case
 //                .filter(x->x.getTestFilepath().contains("TestDateTimeFormatter"))
                 .forEach(this::doTranslate);
     }
 
     private void doTranslate(MigrateTest migrateTest) {
-        Log.info("开始处理[" + migrateTest.getTestFilepath() + "]测试文件的测试迁移");
 
         String testFilepath = migrateTest.getTestFilepath();
         String testMethodApiInvocation = migrateTest.getTestMethodApiInvocation();
 
         fillTestCodeContext(testFilepath);
 
-        // 过滤需要转换的test method
         filterNeedTranslateTestMethod(testMethodApiInvocation);
 
-        // 代码转换
         doTranslate();
 
-        // 代码生成 TODO test diff可视化 不需要生成文件
         TranslateCodeGenerator.doGenerate();
     }
 
@@ -90,15 +78,12 @@ public class TranslateTestService {
         TestCodeContext.filepath = testFilepath;
         TestCodeVisitor testCodeVisitor = new TestCodeVisitor();
         testCodeVisitor.visit(parseTree);
-
-        Log.info("当前处理的测试类名：" + TestCodeContext.className);
     }
 
     private static void filterNeedTranslateTestMethod(String testMethodApiInvocation) {
         Map<String, List<Integer>> map = JsonUtil.jsonToPojo(testMethodApiInvocation, Map.class);
         List<String> migrateTestMethods = map == null ? Lists.newArrayList() : Lists.newArrayList(map.keySet());
 
-        // 过滤掉不需要转换的test code
         TestCodeFilter.filterMethodDeclarationCtxList(migrateTestMethods);
     }
 
@@ -107,22 +92,16 @@ public class TranslateTestService {
         TranslateCodeCollector.className = TestCodeContext.className;
         TranslateCodeCollector.filepath = TestCodeContext.filepath;
 
-        // 类迁移
         translateClassDeclaration();
 
-        // 成员变量迁移
         translateFieldDeclaration();
 
-        // 清除上面已经收集过的bs
         TranslateCodeCollector.blockStatementTranslateCodes = Lists.newArrayList();
 
-        // 方法迁移
         translateFullMethod();
 
-        // 方法部分迁移 TODO:已经可以用chatgpt来做测试解耦合了，部分迁移先不做
 //        translatePartMethod();
 
-        Log.info("代码转换完成");
     }
 
     private void translatePartMethod() {
@@ -154,17 +133,13 @@ public class TranslateTestService {
 
             methodDeclarationTranslate.translateMethodDeclaration(parserRuleContext);
 
-            // methodHeader信息
-            // method blockStatement信息
             TranslateCodeCollector.MethodTranslateCode methodTranslateCode = new TranslateCodeCollector.MethodTranslateCode();
             methodTranslateCode.methodHeaderTranslateCode = TranslateCodeCollector.methodHeaderTranslateCode;
-            // 过滤掉嵌套的blockStatement（可能重复收集了子blockStatement）
             methodTranslateCode.blockStatementTranslateCodes = filterRepeatSubBlockStatement(TranslateCodeCollector.blockStatementTranslateCodes);
             methodTranslateCode.startLine = parserRuleContext.getStart().getLine();
 
             TranslateCodeCollector.methodDeclarationTranslateCodes.add(methodTranslateCode);
 
-            // 一对多 类匹配 替换
             testMethodDiffService.fillTestMethodDiffClassMapping(methodTranslateCode, testMethodDiff);
             testMethodDiffService.save(testMethodDiff);
 
@@ -219,15 +194,12 @@ public class TranslateTestService {
     }
 
     /**
-     * bs可能出现嵌套，内部的bs过滤掉
-     *
      * @param blockStatementTranslateCodes
      * @return
      */
     private List<TranslateCodeCollector.MethodTranslateCode.BlockStatementTranslateCode> filterRepeatSubBlockStatement(
             List<TranslateCodeCollector.MethodTranslateCode.BlockStatementTranslateCode> blockStatementTranslateCodes) {
 
-        // 1. 按bs（blockStatement）的起始token序号大小自然排序
         List<TranslateCodeCollector.MethodTranslateCode.BlockStatementTranslateCode> sortedBlockStatementTranslateCodes =
                 blockStatementTranslateCodes.stream()
                         .sorted(Comparator.comparing(TranslateCodeCollector.MethodTranslateCode.BlockStatementTranslateCode::getTokenStartIndex))

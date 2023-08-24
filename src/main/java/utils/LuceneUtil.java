@@ -29,8 +29,6 @@ public class LuceneUtil {
 
 
     /**
-     * term化
-     *  删除stop word， 提取词干
      * @param text
      * @return
      * @throws Exception
@@ -42,7 +40,7 @@ public class LuceneUtil {
         ts = new PorterStemFilter(ts);
 //        OffsetAttribute offsetAttribute = ts.addAttribute(OffsetAttribute.class);
         CharTermAttribute charTermAttribute = ts.addAttribute(CharTermAttribute.class);
-        ts.reset();//必须的
+        ts.reset();
         List<String> tokens = Lists.newArrayList();
         while (ts.incrementToken()) {
 //            int startOffset = offsetAttribute.startOffset();

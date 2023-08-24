@@ -31,7 +31,6 @@ public class TokenUtil {
     }
 
     /**
-     * fixme U32_AT 连着大写拆分有问题（末尾如果是大写会丢失）
      *
      * @param text
      * @return
@@ -47,7 +46,6 @@ public class TokenUtil {
             return Lists.newArrayList(text);
         }
 
-        // 预处理：首字母统一按转成大写
         String first = String.valueOf(text.charAt(0)).toUpperCase();
         text = first + text.substring(1);
         List<String> tokens = Lists.newArrayList();
@@ -100,7 +98,6 @@ public class TokenUtil {
 
 
     /**
-     * 将下划线分割的字符驼峰化
      */
     public static String camelize(String tabAttr) {
         if (StringUtils.isBlank(tabAttr))
@@ -115,14 +112,12 @@ public class TokenUtil {
     }
 
     /**
-     * 将驼峰字符转换为下划线分割的字符
      */
     public static String decamelize(String camelCaseStr){
         return StringUtils.isBlank(camelCaseStr) ? camelCaseStr : camelCaseStr.replaceAll("[A-Z]", "_$0").toLowerCase();
     }
 
     /**
-     * 将驼峰字符用interval间隔符来分割
      */
     public static List<String> decamelizeToList(String camelCaseStr){
         String decamelizeStr = decamelize(camelCaseStr);

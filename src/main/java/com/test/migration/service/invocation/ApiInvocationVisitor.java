@@ -25,9 +25,6 @@ public class ApiInvocationVisitor extends Java8BaseVisitor<RuleNode> {
         this.testMethodParseBasic = new TestMethodParseBasic();
     }
 
-    /**
-     * 遍历器不应该做过多遍历之外的逻辑（构建/收集结果），后面可以考虑监听器方式实现
-     */
     private TestMethodParseBasic testMethodParseBasic;
 
 
@@ -41,12 +38,9 @@ public class ApiInvocationVisitor extends Java8BaseVisitor<RuleNode> {
         return visitChildren(ctx);
     }
 
-    /**
-     * 方法声明
-     */
+
     @Override
     public RuleNode visitMethodDeclaration(Java8Parser.MethodDeclarationContext ctx) {
-        // 方法内部定义的内部方法，调用关系算到外层方法中
         TestMethodParseBasic.MethodInvocation parentMethod = testMethodParseBasic.getMethodInvocationList().stream()
                 .filter(invoke -> invoke.getStartTokenIndex() < ctx.getStart().getStartIndex())
                 .filter(invoke -> invoke.getEndTokenIndex() > ctx.getStop().getStopIndex())
@@ -56,9 +50,7 @@ public class ApiInvocationVisitor extends Java8BaseVisitor<RuleNode> {
             return visitChildren(ctx);
         }
 
-        // 获取调用者方法名
         String methodName = testMethodBasicService.fetchMethodName(ctx);
-        // 方法名以test为前后缀 或者 方法带有@Test注解
         if (testMethodBasicService.isTestMethod(ctx)) {
             TestMethodParseBasic.MethodInvocation invocation = new TestMethodParseBasic.MethodInvocation();
 
@@ -75,7 +67,6 @@ public class ApiInvocationVisitor extends Java8BaseVisitor<RuleNode> {
             testMethodParseBasic.getReferenceTypeList().add(referenceType);
         }
 
-        // 遍历AST
         return visitChildren(ctx);
     }
 
@@ -161,7 +152,6 @@ public class ApiInvocationVisitor extends Java8BaseVisitor<RuleNode> {
             return;
         }
 
-        // 方法调用必须出现在Caller的方法体内
         if (invocation.getStartTokenIndex() <= ctx.getStart().getStartIndex()
                 && invocation.getEndTokenIndex() >= ctx.getStop().getStopIndex()) {
             String calleeMethodName = fetchCalleeClassName(ctx);
@@ -184,13 +174,11 @@ public class ApiInvocationVisitor extends Java8BaseVisitor<RuleNode> {
 
 
     private void fillCalleeMethodInvocation(ParserRuleContext ctx) {
-        // class中没有方法声明直接调用方法，暂不考虑该case
         TestMethodParseBasic.MethodInvocation invocation = testMethodParseBasic.getInvocation();
         if (invocation == null) {
             return;
         }
 
-        // 方法调用必须出现在Caller的方法体内
         if (invocation.getStartTokenIndex() <= ctx.getStart().getStartIndex()
                 && invocation.getEndTokenIndex() >= ctx.getStop().getStopIndex()) {
             String calleeMethodName = fetchCalleeMethodName(ctx);

@@ -44,17 +44,14 @@ public class TestMethodParseBasic {
 
     @Data
     public static class MethodInvocation {
-        //调用方法
         private String caller;
         private Integer startTokenIndex;
         private Integer endTokenIndex;
-        //被调方法
         private Set<String> callee;
     }
 
     /**
      * tmp
-     * 存储到临时表中，用于filter test
      */
     @Data
     public static class ReferenceType {

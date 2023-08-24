@@ -11,9 +11,6 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 import org.apache.commons.lang3.StringUtils;
 
 /**
- * 对test method的常用处理，比如：
- * 根据方法声明ctx[parseTree]来获取方法名，方法参数，方法返回值
- * 判断一个方法是否是test方法
  */
 public class TestMethodBasicService {
 
@@ -27,9 +24,7 @@ public class TestMethodBasicService {
             }
             RuleContext node = (RuleContext) child;
 
-            // 过滤掉非public的方法
             if (node.getRuleIndex() == Java8Parser.RULE_methodModifier) {
-                // 存在注解的方法
                 boolean existAnnotation = isExistAnnotation(node);
                 if (existAnnotation) {
                     continue;
@@ -45,7 +40,6 @@ public class TestMethodBasicService {
             }
 
             for (int j = 0; j < node.getChildCount(); j++) {
-                // 获取method的Header
                 ParseTree methodHeaderChild = node.getChild(j);
                 boolean isMethodHeaderChildRuleContext = methodHeaderChild instanceof RuleContext;
                 if (!isMethodHeaderChildRuleContext) {
@@ -56,7 +50,6 @@ public class TestMethodBasicService {
                 if (methodHeaderChildNode.getRuleIndex() == Java8Parser.RULE_methodDeclarator) {
                     for (int k = 0; k < methodHeaderChildNode.getChildCount(); k++) {
                         ParseTree child1 = methodHeaderChildNode.getChild(k);
-                        // 填充methodName
                         if (child1 instanceof TerminalNode) {
                             TerminalNode terminalNode = (TerminalNode) child1;
                             if (terminalNode.getSymbol().getType() == Java8Lexer.Identifier) {
@@ -81,9 +74,7 @@ public class TestMethodBasicService {
             }
             RuleContext node = (RuleContext) child;
 
-            // 过滤掉非public的方法
             if (node.getRuleIndex() == Java8Parser.RULE_methodModifier) {
-                // 存在注解的方法
                 boolean existAnnotation = isExistAnnotation(node);
                 if (existAnnotation) {
                     continue;
@@ -99,14 +90,12 @@ public class TestMethodBasicService {
             }
 
             for (int j = 0; j < node.getChildCount(); j++) {
-                // 获取method的Header
                 ParseTree methodHeaderChild = node.getChild(j);
                 boolean isMethodHeaderChildRuleContext = methodHeaderChild instanceof RuleContext;
                 if (!isMethodHeaderChildRuleContext) {
                     continue;
                 }
                 RuleContext methodHeaderChildNode = (RuleContext) methodHeaderChild;
-                // 填充methodReturn
                 if (methodHeaderChildNode.getRuleIndex() == Java8Parser.RULE_result) {
                     methodReturn = methodHeaderChildNode.getText();
                 }
@@ -125,9 +114,7 @@ public class TestMethodBasicService {
             }
             RuleContext node = (RuleContext) child;
 
-            // 过滤掉非public的方法
             if (node.getRuleIndex() == Java8Parser.RULE_methodModifier) {
-                // 存在注解的方法
                 boolean existAnnotation = isExistAnnotation(node);
                 if (existAnnotation) {
                     continue;
@@ -143,7 +130,6 @@ public class TestMethodBasicService {
             }
 
             for (int j = 0; j < node.getChildCount(); j++) {
-                // 获取method的Header
                 ParseTree methodHeaderChild = node.getChild(j);
                 boolean isMethodHeaderChildRuleContext = methodHeaderChild instanceof RuleContext;
                 if (!isMethodHeaderChildRuleContext) {
@@ -155,7 +141,6 @@ public class TestMethodBasicService {
                     for (int k = 0; k < methodHeaderChildNode.getChildCount(); k++) {
                         ParseTree child1 = methodHeaderChildNode.getChild(k);
 
-                        // 填充methodParameter
                         if (child1 instanceof RuleNode) {
                             RuleNode ruleNode = (RuleNode) child1;
                             if (ruleNode.getRuleContext().getRuleIndex() == Java8Parser.RULE_formalParameterList) {
@@ -172,14 +157,6 @@ public class TestMethodBasicService {
     }
 
     /**
-     * 根据method的MethodDeclarationContext判断是否是测试方法
-     *
-     *
-     * todo 更合理的方式，使用正则表达式：[A-Z][A-Za-z\d]*Test(s|Case)?|Test[A-Z][A-Za-z\d]*|IT(.*)|(.*)IT(Case)?'
-     *
-     * method name 以test为前后缀
-     * method 注解 包含@Test
-     *
      * @param ctx
      * @return
      */
@@ -209,7 +186,6 @@ public class TestMethodBasicService {
 
 
     /**
-     * 判断方法是否存在@Test注解
      *
      * @param ctx
      * @return
@@ -233,7 +209,6 @@ public class TestMethodBasicService {
     }
 
     /**
-     * 递归拼接node子节点的text信息，用空格分割
      */
     private void fetchCtxSourceText(ParseTree node, StringBuilder builder) {
         if (node.getChildCount() == 0) {

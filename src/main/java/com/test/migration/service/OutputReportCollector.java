@@ -23,7 +23,6 @@ public class OutputReportCollector {
     public static void output(String moduleName) {
         String outputFileName = reportOutputPath + moduleName + "_report.txt";
         if (reports.isEmpty()) {
-            Log.info("mapping信息为空，不生成output");
             return;
         }
 
@@ -36,9 +35,5 @@ public class OutputReportCollector {
         clear();
     }
 
-//    public static void main(String[] args) {
-//        MappingReportCollector.reports.add("abc:1");
-//        MappingReportCollector.reports.add("bced:2");
-//        MappingReportCollector.output("test");
-//    }
+
 }

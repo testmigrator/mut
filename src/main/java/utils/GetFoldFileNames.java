@@ -10,9 +10,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class GetFoldFileNames {
-    /**
-     * 读取某个文件夹下的所有文件
-     */
+
     public static List<String> readfile(String filepath) {
         return readfileWithType(filepath, "java");
     }

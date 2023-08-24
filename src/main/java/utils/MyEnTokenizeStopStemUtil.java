@@ -4,12 +4,6 @@ import org.tartarus.snowball.ext.PorterStemmer;
 
 import java.io.*;
 import java.util.*;
-
-/**
- * 对英文句子进行 分词、去除停用词、提取词干
- *  分词 用的是 非字符 进行分词，分词后每个单词开头的大写会变小写
- *  提取词干 用的是 snowball
- */
 public class MyEnTokenizeStopStemUtil {
 
     //测试验证
@@ -21,17 +15,14 @@ public class MyEnTokenizeStopStemUtil {
 
     public static List<String> enTokenizeStopStem(String enText){
         ArrayList<String> lastList = new ArrayList<>();
-        //分词
         List<String> list = enTokenize(enText);
         String word;
         Iterator<String> iter = list.iterator();
         while(iter.hasNext()){
             word = iter.next();
-            //去除停用词：判断是不是停用词，是就删除
             if(EnStopwords.isStopword(word)){
                 continue;
             }
-            //词干提取，提取后为空""或null就删除
             word = enWordStem(word);
             if(word == null || "".equals(word)){
                 continue;
@@ -42,9 +33,6 @@ public class MyEnTokenizeStopStemUtil {
     }
 
     /**
-     * 参考: https://blog.csdn.net/selg1984/article/details/5691414
-     * 英文分词
-     * 用 非字符 进行分词，分词后每个单词开头的大写会变小写
      */
     public static List<String> enTokenize(String source){
         ArrayList<String> tokens = new ArrayList();
@@ -73,28 +61,7 @@ public class MyEnTokenizeStopStemUtil {
     }
 
     /**
-     * 参考：https://stackoverflow.com/questions/5391840/stemming-english-words-with-lucene
-     * 英文 单词 的词干提取
-     * 算法: snowball
-     * 使用的jar包 lucene-analyzers-smartcn-7.6.0.jar  (包含中英词干提取)
-     * 百度网盘共享地址: https://pan.baidu.com/s/15D33Qi88n5S0fAl7Uyudwg    提取码：adhd
-     * maven 地址:
-     *<dependency>
-     *     <groupId>org.apache.lucene</groupId>
-     *     <artifactId>lucene-analyzers-smartcn</artifactId>
-     *     <version>7.6.0</version>
-     * </dependency>
-     *
-     * 在英语中，一个单词常常是另一个单词的“变种”，如：happy=>happiness，这里happy叫做happiness的词干（stem）。
-     * 在信息检索系统中，我们常常做的一件事，就是在Term规范化过程中，提取词干（stemming），即除去英文单词分词变换形式的结尾
-     *
-     * 对一个'英语单词'进行词干提取
-     * 比如 having 提取后就是have ，binded 提取后就是bind
-     * 注：不是所有的都能正确提取 ，如 had 提取后还是 had ， happy 和 happiness 提取后都是 happi (算法问题，不同算法结果不一样)
-     *
-     * 强调：
-     * 提取词干的用法：如果你想要拿提取词干的内容去数据库搜索，搜索的字段也必须是词干提取后的内容，不要在原内容字段搜索
-     * (这个过程有点像非对称加密校验一样，比较加密后的内容)
+
      * @param englishWord
      * @return
      */
@@ -119,8 +86,6 @@ public class MyEnTokenizeStopStemUtil {
         /** The default stopwords object (stoplist based on Rainbow) */
         protected static EnStopwords m_Stopwords;
 
-        //下面这一小部分是静态代码块，他是自动执行的。而静态方法则是被动执行，需要使用类名来调用。其次静态代码块先于构造函数执行
-        //具体可参见网址http://www.cnblogs.com/panjun-Donet/archive/2010/08/10/1796209.html
         static {
             if (m_Stopwords == null) {
                 m_Stopwords = new EnStopwords();
@@ -855,12 +820,10 @@ public class MyEnTokenizeStopStemUtil {
          * @param str the word to test
          * @return true if the word is a stopword
          */
-        //m_Stopwords是stopwords类的实例化对象，因此可以调用里面的所有对象
         public static boolean isStopword(String str) {
             return m_Stopwords.is(str.toLowerCase());
         }
 
-        //    //测试程序
 //    public static void main(String[] args) throws UnsupportedEncodingException, FileNotFoundException {
 //
 //        String text = "Gridspot can link up idle computers instances across the world to provide large scale efforts with the computing power they require at affordable prices 0103 centsCPU hour These Linux instances run Ubuntu inside a virtual machine You are able to bid on access to these instances and specify the requirements of your tasks or jobs When your bid is fulfilled you can start running the instances using SSH anywhere youd like There are grant options available to defray costs for researchers and nonprofits The Gridspot API allows you to manage instances and identify new ones You can list available instances access them and stop the instances if you so choose Each API call requires an API key that can be generated from your account page";

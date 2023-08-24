@@ -8,7 +8,6 @@ public class TMPClass {
         List<BlockStatementTreeNode> subBlockStatementTreeNodes;
         ParserRuleContext parserRuleContext;
 
-        // hint 功能
         public static List<String> misMatchCodes;
     }
 

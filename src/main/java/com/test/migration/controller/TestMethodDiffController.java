@@ -40,8 +40,6 @@ public class TestMethodDiffController {
             return CommonReturnType.create(true);
         }
 
-        // 人工调整api mapping 并筛选出待迁移test
-//        TODO
 //        list = filterReList(list);
 
 //        String[] fileSplit = testMethodDiff.getFilepath().split(File.separator);
@@ -54,7 +52,6 @@ public class TestMethodDiffController {
                 .map(x -> CodeDiffVO.builder()
                         .methodName(x.getMethodName())
                         .filepath(x.getFilepath())
-                        // 暂时没用
                         .filename("")
                         .businessKey(x.getBusinessKey())
                         .type(x.getType())
